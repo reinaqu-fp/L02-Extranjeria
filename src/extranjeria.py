@@ -40,12 +40,12 @@ def lee_datos_extranjeros(fichero):
     Tenga en cuenta que los tipos numéricos deben ser de tipo int.
     
     Entrada:
-     - fichero: ruta del fichero csv que contiene los datos en codificación utf-8 
-         -> str
+    @param fichero: ruta del fichero csv que contiene los datos en codificación utf-8 
+    @type fichero: str
 
     Salida:
-     - registros: lista de tuplas con la información de los Extranjeros
-         -> [DatosExtranjeros(str,str,str,str,int,int)]   
+    @return: lista de tuplas con la información de los Extranjeros
+    @rtype: [DatosExtranjeros(str,str,str,str,int,int)]   
     '''
     registros = []
     with open(fichero, encoding='utf-8') as f:
@@ -63,9 +63,11 @@ def numero_nacionalidades_distintas(registros):
     '''
     Devuelve el número de nacionalidades distintas presentes en los registros dados como parámetro. 
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
     Salida:
-     - número de nacionalidades distintas -> int
+    @return: número de nacionalidades distintas 
+    @rtype: int
     '''
     conj = set(registro.pais for registro in registros)
     return len(conj)
@@ -76,12 +78,15 @@ def secciones_distritos_con_extranjeros_nacionalidades(registros, paises):
        en las que hay extranjeros del conjunto de paises dados como parámetros.
        La lista de tuplas estará ordenada por distrito. 
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
-     - paises: conjunto con los nombres de los paises buscados -> set(str)
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
+    @param paises: conjunto con los nombres de los paises buscados 
+    @type: set(str)
     Salida:
-     - Devuelve una lista de tuplas (distrito, seccion) ordenada por distritos con
+    @return: una lista de tuplas (distrito, seccion) ordenada por distritos con
        las secciones y sus distrintos en las que hay extrajeros de los paises
-       dados como parámetro. La lista de tuplas estará ordenada por distrito -> list((distrito,seccion))
+       dados como parámetro. La lista de tuplas estará ordenada por distrito 
+    @rtype: list((distrito,seccion))
        
     '''
     conj= set((registro.distrito,registro.seccion) for registro in registros if  registro.pais in paises)
@@ -94,10 +99,12 @@ def total_extranjeros_por_pais(registros):
     Devuelve un diccionario en el que las claves son los países y los valores
     el número total de extranjeros (tanto hombres como mujeres) de ese país. 
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
     Salida:
-     - diccionario[pais:total_extranjeros] con el número total de extranjeros por 
-       país -> {str:int}
+    @return diccionario[pais:total_extranjeros] con el número total de extranjeros por 
+       país 
+    @rtype {str:int}
     '''
     res={}
     for registro in registros:
@@ -116,11 +123,14 @@ def top_n_extranjeria (registros, n=3):
     Devuelve una lista de tuplas (pais, numero_extranjeros) con los n paises
     de los que hay más población extranjera en los registros pasados como parámetro. 
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
-     - n: Número de elementos de la lista resultante
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
+    @param n: Número de elementos de la lista resultante
+    @type n: int
     Salida:
-     - lista de tuplas (pais, numero_extranjeros) con los n paises de los que hay
+    @return: lista de tuplas (pais, numero_extranjeros) con los n paises de los que hay
        más población extranjera
+    @rtype: (str, int)
    '''
     dicc  = total_extranjeros_por_pais(registros)
     res = sorted(dicc.items(), key=lambda x:x[1], reverse=True)
@@ -131,9 +141,11 @@ def barrio_mas_multicultural(registros):
     '''
     Devuelve el nombre del barrio en el que hay un mayor número de nacionalidades distintas 
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
     Salida:
-     - El nombre del barrio con más nacionalidades distintas -> str
+    @return: el nombre del barrio con más nacionalidades distintas 
+    @rtype: str
     '''
     dicc = agrupar_por_barrio(registros)
     res = max(dicc, key=lambda x:len(dicc.get(x)))
@@ -146,10 +158,12 @@ def agrupar_por_barrio(registros):
     Devuelve un diccionario en el que las claves son los barrios y los valores
     el conjunto de paises de los que hay población extranjera en el barrio
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
+    @param registros: lista de tuplas con la información de extranjeros -> 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
     Salida:
-     - diccionario[pais:set(pais)] con el conjunto de paises de los que hay población
-       extranjera en el barrio dado por la clave> {str:set(str)}
+    @return: diccionario[pais:set(pais)] con el conjunto de paises de los que hay población
+       extranjera en el barrio dado por la clave
+    @rtype: {str:set(str)}
     '''
     res={}
     for registro in registros:
@@ -168,12 +182,15 @@ def barrio_con_mas_extranjeros(registros, tipo=None):
     sea en total (tanto hombres como mujeres) si tipo tiene el valor None, bien
     sea de hombres si tipo es 'Hombres' o mujeres si el tipo es 'Mujeres'
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
-     - tipo: Cadena que representa el tipo de extranjeros a contar, puede tomar los valores None,
+    @param registros: lista de tuplas con la información de extranjeros
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
+    @param tipo: Cadena que representa el tipo de extranjeros a contar, puede tomar los valores None,
         'Hombres' o 'Mujeres'
+    @type tipo: str
     Salida:
-     -  nombre del barrio con mayor número de extranjeros, bien hombres, bien mujeres,
-        bien total (dependiendo del valor del parámetro tipo)-> str
+    @return: nombre del barrio con mayor número de extranjeros, bien hombres, bien mujeres,
+        bien total (dependiendo del valor del parámetro tipo)
+    @rytpe: str
     '''    
     dicc = contar_por_barrio(registros, tipo)
     res = max(dicc.items(), key=lambda x:x[1])
@@ -187,10 +204,12 @@ def contar_por_barrio(registros,tipo=None):
     Devuelve un diccionario en el que las claves son los barrios y los valores
     el total de extranjeros dde ese barrio (bien sean totales, hombres o mujeres) 
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
     Salida:
-     - diccionario[barrio:total_extranjeros] con el número de extranjeros (bien total,
-       bien hombres, bien mujeres-> {str:int}
+    @return diccionario[barrio:total_extranjeros] con el número de extranjeros (bien total,
+       bien hombres, bien mujeres
+    @rtype: {str:int}
     '''
     res={}
     for registro in registros:
@@ -214,10 +233,12 @@ def pais_mas_representado_por_distrito(registros):
     Devuelve un diccionario {distrito:pais} en el que las claves son los distritos y los valores
     el país del que hay más extranjeros en el distrito dado por la clave. 
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
     Salida:
-     - diccionario[distrito:pais] en el que las claves son los distritos y los valores
-    el país del que hay más extranjeros en el distrito dado por la clave -> {str:str}
+    @return: diccionario[distrito:pais] en el que las claves son los distritos y los valores
+    el país del que hay más extranjeros en el distrito dado por la clave
+    @rtype: {str:str}
     '''
 
     dicc = agrupar_por_distrito(registros)
@@ -234,10 +255,12 @@ def agrupar_por_distrito(registros):
     Devuelve un diccionario en el que las claves son los distritos y una lista con 
     los registros de ese distrito
     Entrada:
-     - registros: lista de tuplas con la información de extranjeros -> [DatosExtranjeros(...)]
+    @param registros: lista de tuplas con la información de extranjeros 
+    @type registros: [DatosExtranjeros(str,str,str,str,int,int)]
     Salida:
-     - diccionario[distrito:list(DatosExtranjeros)] con los distritos y los
-       datos de extranjeros agrupados por distrito-> {str:list(DatosExtranjeros)}
+    @return: diccionario[distrito:list(DatosExtranjeros)] con los distritos y los
+       datos de extranjeros agrupados por distrito
+    @rtype: {str:list(DatosExtranjeros)}
     '''
     res=dict()
     for registro in registros:
